@@ -281,7 +281,43 @@ Potential future enhancements include:
 * Machine Learning-based anomaly detection.
 * Phishing response automation.
 * Malware response workflows.
+## Screenshots
 
+### Wazuh Dashboard
+
+![Dashboard](Screenshots/02-Wazuh-Dashboard.png)
+
+### Wazuh Agent Deployment
+
+![Agent Deployment](Screenshots/03-Agent-Deployment.png)
+
+### Active Agent
+
+![Agent Active](Screenshots/04-Agent-Active.png)
+
+### Active Response Configuration
+
+![Active Response](Screenshots/06-Active-Response.png)
+
+### Rule 5763 Detection
+
+![Rule 5763](Screenshots/07-Rule-5763.png)
+
+### SSH Brute Force Attack
+
+![Attack](Screenshots/08-Bruteforce-Attack.png)
+
+### Shuffle Webhook Integration
+
+![Webhook](Screenshots/09-Shuffle-Webhook.png)
+
+### Shuffle Workflow
+
+![Workflow](Screenshots/10-Shuffle-Workflow.png)
+
+### Final Result
+
+![Final Result](Screenshots/11-Final-Result.png)
 ---
 
 ## Conclusion
