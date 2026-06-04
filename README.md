@@ -1,108 +1,303 @@
-# SOC Automation Using Wazuh and Shuffle
+# SOC Automation using Wazuh SIEM and Shuffle SOAR
 
 ## Overview
 
-This project demonstrates the implementation of a Security Operations Center (SOC) automation environment using Wazuh SIEM and Shuffle SOAR.
+This project demonstrates the design and implementation of a Security Operations Center (SOC) Automation environment using **Wazuh SIEM** and **Shuffle SOAR**. The primary objective is to automate the detection, containment, and notification processes associated with SSH brute-force attacks while reducing manual intervention and improving incident response efficiency.
 
-The objective of the project is to automate the detection, containment, and notification processes associated with SSH brute-force attacks while reducing manual intervention and Mean Time To Respond (MTTR).
-
-The solution combines:
-
-- Wazuh SIEM
-- Wazuh Active Response
-- Shuffle SOAR
-- Ubuntu Server
-- Kali Linux
-- VirtualBox
-
-The project simulates a real-world attack scenario in which an attacker attempts to gain unauthorized access to a server through repeated SSH login attempts.
-
-Once the attack is detected, Wazuh automatically blocks the attacker and simultaneously sends the incident to Shuffle through a webhook where automated notification workflows are executed.
+The project was developed within a controlled virtual lab environment to simulate a real-world cyber attack scenario. By integrating security monitoring, automated response mechanisms, and orchestration workflows, the solution provides a practical demonstration of modern SOC operations.
 
 ---
 
 ## Project Objectives
 
-- Build a SOC Automation Lab.
-- Simulate SSH Brute Force Attacks.
-- Detect attacks using Wazuh SIEM.
-- Automatically block attackers using Active Response.
-- Integrate Wazuh with Shuffle SOAR.
-- Generate automated incident notifications.
-- Reduce incident response time.
+* Build a virtual SOC environment.
+* Simulate real-world SSH brute-force attacks.
+* Monitor security events using Wazuh.
+* Automatically detect malicious authentication attempts.
+* Contain threats using Wazuh Active Response.
+* Integrate Wazuh with Shuffle SOAR using Webhooks.
+* Automate incident notification workflows.
+* Reduce Mean Time To Respond (MTTR).
+* Demonstrate the practical value of SIEM and SOAR integration.
 
 ---
 
-## Lab Architecture
+## Architecture
 
-Attacker (Kali Linux)
+The project environment consists of the following components:
 
-↓
+### Attacker Machine
 
-Victim Server (Ubuntu + Wazuh Agent)
+* Kali Linux
+* Used to simulate SSH brute-force attacks.
 
-↓
+### Victim Server
 
+* Ubuntu Server
+* Hosts SSH services.
+* Runs the Wazuh Agent.
+* Generates authentication logs.
+
+### Wazuh SIEM
+
+* Wazuh Manager
+* Security Monitoring
+* Event Correlation
+* Threat Detection
+* Alert Generation
+* Active Response
+
+### Shuffle SOAR
+
+* Workflow Automation
+* Security Orchestration
+* Alert Processing
+* Automated Notification
+
+---
+
+## Architecture Flow
+
+```text
+Kali Linux (Attacker)
+        │
+        ▼
+SSH Brute Force Attack
+        │
+        ▼
+Ubuntu Server (Victim)
+        │
+        ▼
+Wazuh Agent
+        │
+        ▼
 Wazuh Manager
-
-↓
-
-Active Response
-
-↓
-
-Firewall Drop
-
-↓
-
-Shuffle Webhook
-
-↓
-
-Shuffle Workflow
-
-↓
-
+        │
+        ├── Rule 5763 Detection
+        │
+        ├── Active Response
+        │       │
+        │       └── Firewall Drop
+        │
+        ▼
+Webhook Integration
+        │
+        ▼
+Shuffle SOAR
+        │
+        ▼
 Email Notification
+        │
+        ▼
+SOC Analyst
+```
 
 ---
 
 ## Technologies Used
 
-- Wazuh SIEM
-- Wazuh Agent
-- Wazuh Active Response
-- Shuffle SOAR
-- Ubuntu Server
-- Kali Linux
-- Oracle VirtualBox
-- SSH
-- Webhooks
-- Email Integration
+| Technology          | Purpose               |
+| ------------------- | --------------------- |
+| Wazuh               | SIEM Platform         |
+| Shuffle             | SOAR Platform         |
+| Ubuntu Server       | Victim System         |
+| Kali Linux          | Attack Simulation     |
+| Oracle VirtualBox   | Virtualization        |
+| SSH                 | Target Service        |
+| Webhooks            | Integration Mechanism |
+| Active Response     | Automated Containment |
+| Email Notifications | Incident Alerting     |
+
+---
+
+## Detection Workflow
+
+### Phase 1 – Attack Simulation
+
+A brute-force attack is launched from the Kali Linux machine against the Ubuntu victim server using automated password attempts.
+
+### Phase 2 – Log Collection
+
+The Wazuh Agent continuously monitors:
+
+```text
+/var/log/auth.log
+```
+
+Authentication events are forwarded to the Wazuh Manager in real time.
+
+### Phase 3 – Threat Detection
+
+The Wazuh Manager analyzes incoming logs and matches the attack behavior against predefined security rules.
+
+The project specifically utilizes:
+
+```text
+Rule ID: 5763
+```
+
+which detects SSH brute-force attacks.
+
+### Phase 4 – Automated Containment
+
+Once the attack is detected, Wazuh Active Response automatically executes:
+
+```text
+firewall-drop
+```
+
+The attacker's IP address is blocked for 70 seconds.
+
+### Phase 5 – SOAR Automation
+
+The generated alert is forwarded to Shuffle using a Webhook integration.
+
+Shuffle automatically:
+
+* Receives the alert.
+* Processes JSON data.
+* Extracts attack information.
+* Executes the workflow.
+
+### Phase 6 – Incident Notification
+
+An automated email notification is generated and sent to the SOC team containing:
+
+* Attacker IP Address
+* Victim Hostname
+* Detection Timestamp
+* Alert Severity
+* Rule Information
+
+---
+
+## Active Response Configuration
+
+The project utilizes Wazuh Active Response to automatically contain threats.
+
+The response mechanism:
+
+* Detects brute-force activity.
+* Triggers Rule 5763.
+* Executes firewall-drop.
+* Blocks attacker communication.
+* Automatically removes the block after the configured timeout.
+
+This approach demonstrates machine-speed incident response without requiring analyst intervention.
+
+---
+
+## Challenges Encountered
+
+### Wazuh Manual Installation
+
+The project initially attempted a manual deployment of Wazuh on Ubuntu Server.
+
+Several issues were encountered:
+
+* Dependency conflicts
+* Service configuration complexity
+* Deployment instability
+* Time-consuming troubleshooting
+
+### Solution
+
+The team adopted the official Wazuh OVA appliance, providing a stable and preconfigured deployment environment.
+
+---
+
+### Agent Connectivity Issues
+
+Several attempts were required to establish stable communication between the Wazuh Manager and the victim machine.
+
+### Solution
+
+Network settings, manager IP configuration, and agent registration were validated and corrected.
+
+---
+
+### Shuffle Integration Issues
+
+The integration between Wazuh and Shuffle required extensive testing.
+
+Challenges included:
+
+* Webhook validation
+* Payload formatting
+* Alert forwarding
+* Workflow execution
+
+### Solution
+
+Custom integration blocks were configured and tested until reliable communication was achieved.
 
 ---
 
 ## Results
 
-The implemented solution successfully detected SSH brute-force attacks and automatically executed the following actions:
+The project successfully demonstrated:
 
-1. Detection of malicious login attempts.
-2. Triggering Wazuh Rule 5763.
-3. Blocking attacker IP address.
-4. Sending alert data to Shuffle.
-5. Executing automated workflow.
-6. Delivering email notification to SOC personnel.
+* Real-time attack detection.
+* Automated threat containment.
+* Successful Wazuh and Shuffle integration.
+* Automated email notifications.
+* Reduced Mean Time To Respond (MTTR).
+* Improved operational efficiency.
 
-The project demonstrated the effectiveness of combining SIEM and SOAR technologies to automate incident response and improve operational efficiency.
+During testing:
+
+* SSH brute-force attacks were detected successfully.
+* Rule 5763 triggered as expected.
+* Attacker IP addresses were blocked automatically.
+* Shuffle workflows executed successfully.
+* Email notifications were delivered correctly.
+
+---
+
+## Security Benefits
+
+This implementation demonstrates several key advantages of SOC automation:
+
+* Faster incident response.
+* Reduced analyst workload.
+* Consistent response procedures.
+* Lower operational overhead.
+* Improved security visibility.
+* Reduced risk of human error.
 
 ---
 
 ## Future Improvements
 
-- VirusTotal Integration
-- Threat Intelligence Integration
-- Slack Notifications
-- Microsoft Teams Notifications
-- XDR Integration
-- Machine Learning Detection
-- Automated Ticket Creation
+Potential future enhancements include:
+
+* VirusTotal integration.
+* Threat Intelligence Platforms (TIP).
+* Endpoint Detection and Response (EDR).
+* XDR integration.
+* Microsoft Teams notifications.
+* Slack integration.
+* Automated ticket creation.
+* Machine Learning-based anomaly detection.
+* Phishing response automation.
+* Malware response workflows.
+
+---
+
+## Conclusion
+
+This project successfully demonstrates how SIEM and SOAR technologies can be combined to create an automated and scalable Security Operations Center environment.
+
+By integrating Wazuh SIEM with Shuffle SOAR, the implemented architecture was capable of detecting SSH brute-force attacks, automatically containing threats, and notifying security personnel without manual intervention.
+
+The results highlight the practical benefits of SOC automation and demonstrate how modern organizations can leverage security orchestration and automated response mechanisms to improve resilience against evolving cyber threats.
+
+---
+
+## Authors
+
+SOC Automation Project Team
+
+Cybersecurity Department
+
+2026
