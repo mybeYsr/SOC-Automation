@@ -330,9 +330,14 @@ The results highlight the practical benefits of SOC automation and demonstrate h
 
 ---
 
-## Authors
+## Team Members
 
-SOC Automation Project Team
+This project was developed collaboratively by:
+
+Yasser 
+Abdulrahman
+Majed
+
 
 Cybersecurity Department
 
