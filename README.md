@@ -334,8 +334,10 @@ The results highlight the practical benefits of SOC automation and demonstrate h
 
 This project was developed collaboratively by:
 
-Yasser 
+Yasser
+
 Abdulrahman
+
 Majed
 
 
